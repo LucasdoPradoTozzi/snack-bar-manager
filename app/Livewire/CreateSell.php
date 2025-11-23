@@ -40,7 +40,7 @@ class CreateSell extends Component
     public $paymentMethod;
 
     public bool $isDeferredPayment = false;
-    public string $payingNow;
+    public string $payingNow = '';
 
     public bool $showPaymentModal = false;
 
@@ -261,7 +261,7 @@ class CreateSell extends Component
                 $stock->save();
             }
 
-            $paidValue = (!$this->isDeferredPayment) ? $saleValue : $this->payingNow;
+            $paidValue = (!$this->isDeferredPayment) ? $saleValue : (int)$this->payingNow;
 
             if ($paidValue > 0) {
                 $salePayment = SalesPayment::create([
