@@ -32,7 +32,7 @@ services:
         volumes:
             - db_volume:/var/lib/mysql
         ports:
-            - ${DB_PORT}:3306
+            - ${DB_EXTERNAL_PORT}:3306
         networks:
             - mysql_net
         restart: always

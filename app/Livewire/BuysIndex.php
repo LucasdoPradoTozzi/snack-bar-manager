@@ -26,15 +26,6 @@ class BuysIndex extends Component
             ->where('title', 'like', '%' . $this->search . '%')
             ->paginate(9);
 
-        $moneyService = new MoneyService();
-
-        $buys->getCollection()->transform(function ($buy) use ($moneyService) {
-            if (isset($buy->purchase_item_sum_total_price)) {
-                $buy->purchase_item_sum_total_price = $moneyService->convertIntegerToString($buy->purchase_item_sum_total_price);
-            }
-            return $buy;
-        });
-
         return view('livewire.buys-index', ['buys' => $buys]);
     }
 }

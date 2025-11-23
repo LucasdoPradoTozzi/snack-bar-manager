@@ -185,6 +185,8 @@ class CreateBuy extends Component
 
             $moneyService = new MoneyService();
 
+            $buyTotalValue = 0;
+
             foreach ($this->items as $product) {
                 $productById = Product::where('id', $product['product_id'])->first();
                 if (!$productById) throw new Exception('Produto não encontrado, verifique se o mesmo ainda existe.');
@@ -193,6 +195,8 @@ class CreateBuy extends Component
                 if (empty($buyValue)) throw new Exception('Erro no valor do produto:' . $productById->name . '. O valor mínimo é de R$ 0,01.');
 
                 $totalPrice = $moneyService->getMultiplicationIntegerValue($buyValue, $product['amount']);
+
+                $buyTotalValue += $totalPrice;
 
                 PurchaseItem::create([
                     'product_id' => $product['product_id'],
@@ -209,6 +213,9 @@ class CreateBuy extends Component
                 $stock->quantity += $product['amount'];
                 $stock->save();
             }
+
+            $buy->total_value = $buyTotalValue;
+            $buy->save();
 
             DB::commit();
             return redirect('/buys');
